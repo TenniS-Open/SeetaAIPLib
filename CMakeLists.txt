@@ -3,7 +3,6 @@ project(SeetaAIPLib)
 
 set(CMAKE_CXX_STANDARD 11)
 
-
 # ======================== Those are global options ========================== #
 # Global option dot not edit, only if very needed.
 # Output library name
@@ -18,7 +17,7 @@ set(AIP_TAG "" CACHE STRING "Give git tag. If set, AIP_UPDATE will disabled.")
 
 # ======================== Those are local options ========================== #
 option(AIP_UPDATE "[Optional] Auto check if AIP header updated." ON)
-option(AIP_TEST "[Optional] If built test example." OFF)
+option(AIP_TEST "[Optional] If built test executable binary." OFF)
 option(AIP_TENNIS "[Optional] If link TenniS." ON)
 option(AIP_OPENCV "[Optional] If link OpenCV." OFF)
 set(AIP_TYPE "SHARED" CACHE STRING "In SHARED or STATIC. Do ==NOT== Edit!")
@@ -29,6 +28,9 @@ message(STATUS "========[ (${AIP_NAME}): Library type: ${AIP_TYPE}")
 message(STATUS "========[ (${AIP_NAME}): Link TenniS: ${AIP_TENNIS}")
 message(STATUS "========[ (${AIP_NAME}): Link OpenCV: ${AIP_OPENCV}")
 message(STATUS "========[ (${AIP_NAME}): Build test: ${AIP_TEST}")
+
+# add cmake sub script root
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # check SeetaAIP headers
 find_package(Git QUIET)
@@ -81,6 +83,7 @@ if (AIP_OPENCV)
 endif ()
 
 if (AIP_TENNIS)
+    find_package(TenniS REQUIRED)
 endif ()
 
 # glob source files
@@ -114,6 +117,11 @@ target_include_directories(${PROJECT_NAME}_LIB
 if (AIP_OPENCV AND OpenCV_FOUND)
     target_include_directories(${PROJECT_NAME}_LIB PRIVATE ${OpenCV_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME}_LIB ${OpenCV_LIBS})
+endif ()
+
+if (AIP_TENNIS AND TenniS_FOUND)
+    target_include_directories(${PROJECT_NAME}_LIB PRIVATE ${TenniS_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME}_LIB ${TenniS_LIBS})
 endif ()
 
 set_target_properties(${PROJECT_NAME}_LIB PROPERTIES OUTPUT_NAME ${AIP_NAME})
