@@ -19,7 +19,6 @@ set(${TCN}_HOME "${TCN}_HOME-NOTFOUND" CACHE STRING "Tell where headers and libr
 mark_as_advanced(${TCN}_ARCH)
 
 # =============== There are notices ================ #
-# Set CMAKE_LIBRARY_ARCHITECTURE to find library in <prefix>/lib/<arch>.
 # ENV_LIBRARY_DIR ENV_HEADER_DIR was set by Seeta Compilation Scripts
 # =============== Above are notices ================ #
 
