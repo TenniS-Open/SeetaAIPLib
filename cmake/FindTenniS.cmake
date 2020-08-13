@@ -7,6 +7,7 @@ set(TCN TenniS)
 set(${TCN}_MARK_HEADER "api/tennis.h")
 set(${TCN}_MARK_LIBRARY "tennis")
 set(${TCN}_MARK_DEBUG "")
+set(${TCN}_ARCH "" CACHE STRING "Give library arch in finding, empty for default.")
 
 # =============== There are notices ================ #
 # Set CMAKE_LIBRARY_ARCHITECTURE to find library in <prefix>/lib/<arch>.
@@ -31,17 +32,37 @@ if (NOT "${${TCN}_ROOT}" STREQUAL "")
             "${${TCN}_ROOT}/.."
             )
 endif()
+list(APPEND ${TCN}_PATHS
+        ENV ${TCN}_DIR
+        ENV ${TCN}_ROOT
+        )
+# Set suffix
+set(${TCN}_INCLUDE_SUFFIXES)
+list(APPEND ${TCN}_INCLUDE_SUFFIXES
+        include
+        "${CMAKE_INSTALL_INCLUDEDIR}"
+        "${ENV_HEADER_DIR}"
+        )
+set(${TCN}_LIB_SUFFIXES)
+if (NOT "${${TCN}_ARCH}" STREQUAL "")
+    list(APPEND ${TCN}_LIB_SUFFIXES
+            "lib/${${TCN}_ARCH}"
+            "${${TCN}_ARCH}/lib"
+            "${${TCN}_ARCH}"
+            )
+endif()
+list(APPEND ${TCN}_LIB_SUFFIXES
+        lib
+        "${CMAKE_INSTALL_LIBDIR}"
+        "${ENV_LIBRARY_DIR}"
+        )
 
 find_library(${TCN}_LIBRARY_RELEASE
         NAMES ${${TCN}_MARK_LIBRARY}
         PATHS
             ${${TCN}_PATHS}
-            ENV ${TCN}_DIR
-            ENV ${TCN}_ROOT
         PATH_SUFFIXES
-            lib
-            "${CMAKE_INSTALL_LIBDIR}"
-            "${ENV_LIBRARY_DIR}"
+            ${${TCN}_LIB_SUFFIXES}
         )
 
 if ("${${TCN}_MARK_DEBUG}" STREQUAL "")
@@ -55,15 +76,11 @@ else ()
     find_library(${TCN}_LIBRARY_DEBUG
             NAMES ${${TCN}_MARK_LIBRARY}${${TCN}_MARK_DEBUG}
             HINTS
-                "${TCN}_LIBRARY_RELEASE_HINT"
+                "${${TCN}_LIBRARY_RELEASE_HINT}"
             PATHS
                 ${${TCN}_PATHS}
-                ENV ${TCN}_DIR
-                ENV ${TCN}_ROOT
             PATH_SUFFIXES
-                lib
-                "${CMAKE_INSTALL_LIBDIR}"
-                "${ENV_LIBRARY_DIR}"
+                ${${TCN}_LIB_SUFFIXES}
             )
     unset(${TCN}_LIBRARY_RELEASE_HINT)
 endif ()
@@ -72,12 +89,8 @@ find_path(${TCN}_INCLUDE_DIR
         NAMES ${${TCN}_MARK_HEADER}
         PATHS
             ${${TCN}_PATHS}
-            ENV ${TCN}_DIR
-            ENV ${TCN}_ROOT
         PATH_SUFFIXES
-            include
-            "${CMAKE_INSTALL_INCLUDEDIR}"
-            "${ENV_HEADER_DIR}"
+            ${${TCN}_INCLUDE_SUFFIXES}
         )
 
 if (NOT ${TCN}_INCLUDE_DIR OR
@@ -109,9 +122,7 @@ if (NOT ${TCN}_INCLUDE_DIR OR
                 HINTS
                     ${${TCN}_HINTS}
                 PATH_SUFFIXES
-                    include
-                    "${CMAKE_INSTALL_INCLUDEDIR}"
-                    "${ENV_HEADER_DIR}"
+                    ${${TCN}_INCLUDE_SUFFIXES}
                 )
     endif()
     if (NOT ${TCN}_LIBRARY_RELEASE)
@@ -120,9 +131,7 @@ if (NOT ${TCN}_INCLUDE_DIR OR
                 HINTS
                     ${${TCN}_HINTS}
                 PATH_SUFFIXES
-                    lib
-                    "${CMAKE_INSTALL_LIBDIR}"
-                    "${ENV_LIBRARY_DIR}"
+                    ${${TCN}_LIB_SUFFIXES}
                 )
     endif()
     if (NOT ${TCN}_LIBRARY_DEBUG)
@@ -131,13 +140,16 @@ if (NOT ${TCN}_INCLUDE_DIR OR
                 HINTS
                     ${${TCN}_HINTS}
                 PATH_SUFFIXES
-                    lib
-                    "${CMAKE_INSTALL_LIBDIR}"
-                    "${ENV_LIBRARY_DIR}"
+                    ${${TCN}_LIB_SUFFIXES}
                 )
     endif()
     unset(${TCN}_HINTS)
 endif()
+
+# delete temp vars
+unset(${TCN}_PATHS)
+unset(${TCN}_INCLUDE_SUFFIXES)
+unset(${TCN}_LIB_SUFFIXES)
 
 if (NOT ${TCN}_INCLUDE_DIR OR
         NOT ${TCN}_LIBRARY_RELEASE)
