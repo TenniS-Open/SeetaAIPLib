@@ -14,6 +14,7 @@ set(AIP_GIT https://gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP)
 # SeetaAIP API header tag
 set(AIP_TAG "" CACHE STRING "Give git tag. If set, AIP_UPDATE will disabled.")
 # ======================== Above are global options ========================== #
+mark_as_advanced(AIP_TAG)
 
 # ======================== Those are local options ========================== #
 option(AIP_UPDATE "[Optional] Auto check if AIP header updated." ON)
@@ -22,6 +23,8 @@ option(AIP_TENNIS "[Optional] If link TenniS." ON)
 option(AIP_OPENCV "[Optional] If link OpenCV." OFF)
 set(AIP_TYPE "SHARED" CACHE STRING "In SHARED or STATIC. Do ==NOT== Edit!")
 # ======================== Above are local options ========================== #
+mark_as_advanced(AIP_UPDATE)
+mark_as_advanced(AIP_TYPE)
 
 message(STATUS "========[ Configuring \"${AIP_NAME}\"")
 message(STATUS "========[ (${AIP_NAME}): Library type: ${AIP_TYPE}")

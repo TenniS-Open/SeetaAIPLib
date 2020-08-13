@@ -8,6 +8,8 @@ set(${TCN}_MARK_HEADER "api/tennis.h")
 set(${TCN}_MARK_LIBRARY "tennis")
 set(${TCN}_MARK_DEBUG "")
 set(${TCN}_ARCH "" CACHE STRING "Give library arch in finding, empty for default.")
+set(${TCN}_HOME "" CACHE STRING "Tell where headers and libraries are.")
+mark_as_advanced(${TCN}_ARCH)
 
 # =============== There are notices ================ #
 # Set CMAKE_LIBRARY_ARCHITECTURE to find library in <prefix>/lib/<arch>.
@@ -16,6 +18,9 @@ set(${TCN}_ARCH "" CACHE STRING "Give library arch in finding, empty for default
 
 # Set tip paths
 set(${TCN}_PATHS)
+if (NOT "${${TCN}_HOME}" STREQUAL "")
+    list(APPEND ${TCN}_PATHS "${${TCN}_HOME}")
+endif()
 list(APPEND ${TCN}_PATHS
         "${CMAKE_CURRENT_LIST_DIR}"
         "${CMAKE_CURRENT_LIST_DIR}/.."
