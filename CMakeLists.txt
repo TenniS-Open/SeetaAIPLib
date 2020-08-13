@@ -78,7 +78,24 @@ if (EXISTS ${AIP_ROOT}/.git
             WORKING_DIRECTORY ${AIP_ROOT})
 endif ()
 
+# check AIP_NAME
+string(REGEX MATCH "^[A-Za-z_][A-Za-z0-9_]*$" MATCHED_AIP_NAME "${AIP_NAME}")
+message("MATCHED_AIP_NAME: ${MATCHED_AIP_NAME}")
+if (NOT MATCHED_AIP_NAME)
+    message(FATAL_ERROR "The AIP_NAME must be a valid variable name, but got \"${AIP_NAME}\"")
+endif ()
+unset(MATCHED_AIP_NAME)
+
 # generate this library header
+string(TIMESTAMP DATETIME "%Y/%m/%d")
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/template/module_aip_load.h.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/${AIP_NAME}.h
+)
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/template/this_aip_load.h.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/this_aip_load.h
+)
 
 # Find library
 if (AIP_OPENCV)

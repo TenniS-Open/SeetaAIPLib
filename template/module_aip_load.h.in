@@ -1,0 +1,14 @@
+/**
+ * @author SeetaTech
+ * @date @DATETIME@
+ * This file is auto compiled by CMake. Do NOT modify manually.
+ */
+
+#ifndef _INC_@AIP_NAME@_AUTO_COMPILATION_H
+#define _INC_@AIP_NAME@_AUTO_COMPILATION_H
+
+#include "seeta_aip.h"
+
+SEETA_AIP_API int32_t @AIP_NAME@_aip_load(struct SeetaAIP *aip, uint32_t size);
+
+#endif //_INC_@AIP_NAME@_AUTO_COMPILATION_H

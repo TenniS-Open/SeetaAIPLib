@@ -1,0 +1,14 @@
+/**
+ * @author SeetaTech
+ * @date @DATETIME@
+ * This file is auto compiled by CMake. Do NOT modify manually.
+ */
+
+#ifndef _INC_@AIP_NAME@_THIS_AIP_LOAD_AUTO_COMPILATION_H
+#define _INC_@AIP_NAME@_THIS_AIP_LOAD_AUTO_COMPILATION_H
+
+#include "@AIP_NAME@.h"
+
+#define this_aip_load @AIP_NAME@_aip_load
+
+#endif //_INC_@AIP_NAME@_THIS_AIP_LOAD_AUTO_COMPILATION_H

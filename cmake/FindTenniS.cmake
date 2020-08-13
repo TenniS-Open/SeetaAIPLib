@@ -2,11 +2,18 @@
 
 # This config name
 set(TCN TenniS)
+# The Following VAR will be set
+# ${TCN}_FOUND
+# ${TCN}_LIBS
+# ${TCN}_INCLUDE_DIR
+# ${TCN}_HOME   # TELL where the library root
 
-# Set needed files
+# Set this lib option
 set(${TCN}_MARK_HEADER "api/tennis.h")
 set(${TCN}_MARK_LIBRARY "tennis")
 set(${TCN}_MARK_DEBUG "")
+
+# Common option
 set(${TCN}_ARCH "" CACHE STRING "Give library arch in finding, empty for default.")
 set(${TCN}_HOME "${TCN}_HOME-NOTFOUND" CACHE STRING "Tell where headers and libraries are.")
 mark_as_advanced(${TCN}_ARCH)
