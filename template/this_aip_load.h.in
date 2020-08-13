@@ -10,5 +10,6 @@
 #include "@AIP_NAME@.h"
 
 #define this_aip_load @AIP_NAME@_aip_load
+#define THIS_AIP_MODULE "@AIP_NAME@"
 
 #endif //_INC_@AIP_NAME@_THIS_AIP_LOAD_AUTO_COMPILATION_H

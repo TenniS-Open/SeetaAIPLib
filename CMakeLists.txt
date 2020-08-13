@@ -80,7 +80,6 @@ endif ()
 
 # check AIP_NAME
 string(REGEX MATCH "^[A-Za-z_][A-Za-z0-9_]*$" MATCHED_AIP_NAME "${AIP_NAME}")
-message("MATCHED_AIP_NAME: ${MATCHED_AIP_NAME}")
 if (NOT MATCHED_AIP_NAME)
     message(FATAL_ERROR "The AIP_NAME must be a valid variable name, but got \"${AIP_NAME}\"")
 endif ()
