@@ -8,7 +8,7 @@ set(${TCN}_MARK_HEADER "api/tennis.h")
 set(${TCN}_MARK_LIBRARY "tennis")
 set(${TCN}_MARK_DEBUG "")
 set(${TCN}_ARCH "" CACHE STRING "Give library arch in finding, empty for default.")
-set(${TCN}_HOME "" CACHE STRING "Tell where headers and libraries are.")
+set(${TCN}_HOME "${TCN}_HOME-NOTFOUND" CACHE STRING "Tell where headers and libraries are.")
 mark_as_advanced(${TCN}_ARCH)
 
 # =============== There are notices ================ #
@@ -18,7 +18,7 @@ mark_as_advanced(${TCN}_ARCH)
 
 # Set tip paths
 set(${TCN}_PATHS)
-if (NOT "${${TCN}_HOME}" STREQUAL "")
+if (${TCN}_HOME)
     list(APPEND ${TCN}_PATHS "${${TCN}_HOME}")
 endif()
 list(APPEND ${TCN}_PATHS
@@ -159,10 +159,10 @@ unset(${TCN}_LIB_SUFFIXES)
 if (NOT ${TCN}_INCLUDE_DIR OR
         NOT ${TCN}_LIBRARY_RELEASE)
     if (NOT ${TCN}_INCLUDE_DIR)
-        message(FATAL_ERROR "Could not find header ${${TCN}_MARK_HEADER}! Try to set ${TCN}_ROOT to the package root.")
+        message(FATAL_ERROR "Could not find header ${${TCN}_MARK_HEADER}! Try to set ${TCN}_HOME to the package root.")
     endif ()
     if (NOT ${TCN}_LIBRARY_RELEASE)
-        message(FATAL_ERROR "Could not find library ${${TCN}_MARK_LIBRARY}! Try to set ${TCN}_ROOT to the package root.")
+        message(FATAL_ERROR "Could not find library ${${TCN}_MARK_LIBRARY}! Try to set ${TCN}_HOME to the package root.")
     endif ()
 endif()
 if (NOT ${TCN}_LIBRARY_DEBUG)
@@ -186,7 +186,7 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(${TCN}
             ${TCN}_LIBRARY
             ${TCN}_INCLUDE_DIR
         FAIL_MESSAGE
-            "Could not find ${TCN}! Try to set ${TCN}_ROOT to the package root."
+            "Could not find ${TCN}! Try to set ${TCN}_HOME to the package root."
         )
 
 if(${TCN}_FOUND)
