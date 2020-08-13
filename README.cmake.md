@@ -3,8 +3,6 @@
 
 ## Configuration
 
-### Change options
-
 Firstly, Change project name in `Cmakelists.txt`.
 It decided your output library name.
 
@@ -45,9 +43,21 @@ Finally, there cmake option can be used:
     + `CMAKE_INSTALL_PREFIX`: Set install path.
     + `CMAKE_BUILD_TYPE`: `[Release|Debug]`
     
-Now generate project in different system.
-    
+## Develop library
+
+Now, all the options are set properly.
+
+Write you own AIP code in `src/lib.cpp`.
+Finish the class `ThisPackage`, and change `ThisAIPHeader` and `ThisAIP` properly.
+All the SeetaAIP development will be done.
+
+If you need build test executable binary, turn the `AIP_TEST` ON.
+Write test code in `test/test.cpp` or create other test file in `test`.
+Build and run `test_<AIP_NAME>`.
+
 ## Generate project and compile
+
+This part to tell how to compile library with this cmake template.
     
 ### For Linux
 
