@@ -176,7 +176,7 @@ Run following commands to build and install library:
 ```
 export ANDROID_NDK=<path to NDK>
 mkdir build
-cd builds
+cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=<path> \
     -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake \
     -DANDROID_ABI="arm64-v8a" \
@@ -213,7 +213,7 @@ Following options are important:
 - `CMAKE_TOOLCHAIN_FILE`: Path to toolchain file to cross compile.
 - `ANDROID_ABI`: Could be `armeabi`, `armeabi-v7a`, `armeabi-v7a with NEON`, `arm64-v8a`, `x86` or `x86_64`. Default is `armeabi-v7a`.
 - `ANDROID_PLATFORM`: Recommend to be `android-19`, means `Android 4.4`.
-- `ANDROID_STL`: Could be `c++_shared`, `c++_static` or `system`. Default is `c++_static` and Recommend.s
+- `ANDROID_STL`: Could be `c++_shared`, `c++_static` or `system`. Default is `c++_static` and Recommend.
 
 There are some useful android system version and API version.
 
@@ -229,7 +229,41 @@ There are some useful android system version and API version.
 
 ### For IOS
 
-Waiting to upload.
+Following commands only work in `MacOS`:
+```
+mkdir build
+cd builds
+cmake .. -DCMAKE_INSTALL_PREFIX=<path> \
+    -DCMAKE_TOOLCHAIN_FILE=../toolchain/iOS.cmake \
+    -DIOS_DEPLOYMENT_TARGET=9 \
+    -DENABLE_BITCODE=0
+cmake --build .
+cmake --build . --target install
+```
+
+Following options are important:
+
+- `IOS_DEPLOYMENT_TARGET`: The mean supported IOS system version. `9` recommended.
+- `ENABLE_BITCODE`: Could be `0` or `1`. Default is `1`. `0` recommended.
+If set, compile binary file will be very large. Turn on this only if you really know and need it.
+- `IOS_PLATFORM`: Could `OS`, `SIMULATOR`, `SIMULATOR64`, `TVOS` or `SIMULATOR_TVOS`. Default is `OS`.
+- `IOS_ARCH`: Could be `armv7`, `armv7s`, `arm64`, `i386` or `x86_64`.
+You can set multi arch by space separated. Do NOT edit only if you really know and need it.
+
+The `OS` library only can be execute on iphone/ipad devices.  
+The `SIMULATOR*` library only can be execute on simulator on `x86` CPU.
+
+Notice: If `IOS_PLATFORM` set but `IOS_ARCH` is not. `IOS_ARCH` will be auto set properly.
+
+Here is the default `IOS_ARCH` of `IOS_PLATFORM`:
+
+| Platform | Arch |
+| :---: | :---: |
+| OS | armv7 armv7s arm64 |
+| SIMULATOR | i386 |
+| SIMULATOR64 | x86_64 |
+| TVOS | arm64 |
+| SIMULATOR_TVOS | x86_64 |
 
 ### Cross compilation
 
