@@ -1,0 +1,28 @@
+# for python
+*.pyc
+*_pb2.py
+# build files
+*.dll
+*.exe
+*.obj
+*.o
+*.so
+*.a
+/cmake-build-*
+/bin
+/lib
+# binary file
+*.tsm
+*.t
+*.txt
+*.dat
+*.pkl
+*.tar.gz
+*.out
+# project files
+/.idea
+# auto generate files
+/.api
+/include/*
+this_aip_load.h
+
