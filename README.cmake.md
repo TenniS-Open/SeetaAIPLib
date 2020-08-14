@@ -1,5 +1,5 @@
 # SeetaAIP Library
-> How to use this SeetaAIP template
+> How to use this SeetaAIP template.
 
 ## Configuration
 
@@ -10,7 +10,7 @@ It decided your output library name.
 
 You can change project name quickly by shell script:
 ```shell
-echo Notimplement.
+bash script/rename.sh <PorjectName>
 ```
 
 There are some option of cmake:
