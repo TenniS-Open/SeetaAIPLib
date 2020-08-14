@@ -22,7 +22,7 @@ fi
 
 # find project name
 # shellcheck disable=SC2002
-project_command=$(cat "$cmakepath" | grep -E '^(?:project|PROJECT)(.*)')
+project_command=$(cat "$cmakepath" | grep -E '^(project|PROJECT)(.*)')
 if [ -z "$project_command" ];then
   echo "Can not found project command, only project(XXX) or PROJECT(XXX) supported."
   echo "$usage"
@@ -61,4 +61,4 @@ fi
 
 expr="s/^$project_command/$project($newname)/"
 
-sed -i "" "$expr" "$cmakepath"
+sed -i"" "$expr" "$cmakepath"
