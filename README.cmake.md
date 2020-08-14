@@ -42,7 +42,7 @@ Finally, there cmake option can be used:
 
 - Original CMake
     + `CMAKE_INSTALL_PREFIX`: Set install path.
-    + `CMAKE_BUILD_TYPE`: `[Release|Debug]`
+    + `CMAKE_BUILD_TYPE`: `[Release|Debug|MinSizeRel]`
     
 ## Develop library
 
@@ -67,7 +67,7 @@ This part to tell how to compile library with this cmake template.
 ```
 mkdir build
 cd build
-cmake .. -DAIP_TENNIS=ON -DCMAKE_INSTALL_PREFIX=<path>
+cmake .. -DCMAKE_INSTALL_PREFIX=<path>
 make -j16
 make install
 ```
@@ -76,7 +76,7 @@ make install
 ```
 mkdir build
 cd build
-cmake .. -DAIP_TENNIS=ON -DCMAKE_INSTALL_PREFIX=<path>
+cmake .. -DCMAKE_INSTALL_PREFIX=<path>
 make -j16
 make install
 ```
@@ -127,8 +127,24 @@ Then, generate project file by cmake.
 
 mkdir build
 cd build
-cmake .. -DAIP_TENNIS=ON -DCMAKE_INSTALL_PREFIX=<path> -G <Generator>
+cmake .. -DCMAKE_INSTALL_PREFIX=<path> -G <Generator>
 ```
+
+In the most time, run following command to compile and install.
+```
+cmake --build .
+cmake --build . --target install
+```
+
+In windows, you should add `Configuration` option like:
+```
+cmake --build . --config Release
+cmake --build . --config Release --target install
+```
+
+But, there are another way to compile.
+The following section will have some advanced,
+ordinary users can skip reading.
 
 Well, with different generators, there are different ways:
 
@@ -152,13 +168,74 @@ Well, with different generators, there are different ways:
 
 Well `NDK` is need by anyway. View the website for more information.
 
-`NDK` can be download manually, or by the way they like. 
+`NDK` can be [download](https://developer.android.com/ndk/downloads) manually, or by the way they like. 
 
 #### With host Linux
 
+Run following commands to build and install library:
+```
+export ANDROID_NDK=<path to NDK>
+mkdir build
+cd builds
+cmake .. -DCMAKE_INSTALL_PREFIX=<path> \
+    -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake \
+    -DANDROID_ABI="arm64-v8a" \
+    -DANDROID_PLATFORM=android-19 \
+    -DANDROID_STL=c++_static \
+    -DANDROID_ARM_NEON=ON
+cmake --build .
+cmake --build . --target install
+```
+
 #### With host Windows
 
+Run following commands to build and install library:
+```
+set "ANDROID_NDK=<path to NDK>"
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=<path> ^
+    -G"Unix Makefiles" ^
+    -DCMAKE_TOOLCHAIN_FILE=%ANDROID_NDK%/build/cmake/android.toolchain.cmake ^
+    -DCMAKE_MAKE_PROGRAM=%ANDROID_NDK%/prebuilt/windows-x86_64/bin/make.exe ^
+    -DANDROID_ABI="arm64-v8a" ^
+    -DANDROID_PLATFORM=android-19 ^
+    -DANDROID_STL=c++_static ^
+    -DANDROID_ARM_NEON=ON
+cmake --build .
+cmake --build . --target install
+```
+
+Check [CMake for Android](https://developer.android.google.cn/ndk/guides/cmake) for more information.
+
+Following options are important:
+
+- `CMAKE_TOOLCHAIN_FILE`: Path to toolchain file to cross compile.
+- `ANDROID_ABI`: Could be `armeabi`, `armeabi-v7a`, `armeabi-v7a with NEON`, `arm64-v8a`, `x86` or `x86_64`. Default is `armeabi-v7a`.
+- `ANDROID_PLATFORM`: Recommend to be `android-19`, means `Android 4.4`.
+- `ANDROID_STL`: Could be `c++_shared`, `c++_static` or `system`. Default is `c++_static` and Recommend.s
+
+There are some useful android system version and API version.
+
+| Name | Version | API | Release time |
+| :---: | :---: | :---: | :---: |
+| Kitkat | 4.4 | 19 | 2013-10-01 |
+| Lollipop | 5.0 | 21 | 2014-11-01 |
+| Marshmallow | 6.0 | 23 | 2015-08-01 |
+| Nougat | 7.0 | 24 | 2018-08-01 |
+| Oreo | 8.0 | 26 | 2017-08-01 |
+| Pie | 9.0 | 28 | 2018-08-01 |
+| Q | 10.0 | 29 | 2019-9-03 |
+
 ### For IOS
+
+Waiting to upload.
+
+### Cross compilation
+
+#### ARM on x86
+
+Waiting to upload.
 
 ## Install
 
@@ -167,7 +244,7 @@ The compile binary library will put in `bin`.
 Make sure you've set `CMAKE_INSTALL_PREFIX` to the path you want.
 Then run
 ```
-make install
+cmake --build . --target install
 ```
 to install library.
 Or, use specific install command described in `Generate project and compile` part.

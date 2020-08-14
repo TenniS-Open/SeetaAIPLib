@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.6)
 project(SeetaAIPLib)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -151,9 +151,9 @@ set_target_properties(${PROJECT_NAME}_LIB PROPERTIES
          )
 
 install(TARGETS ${PROJECT_NAME}_LIB
-        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
         FRAMEWORK DESTINATION framework
         )
 
