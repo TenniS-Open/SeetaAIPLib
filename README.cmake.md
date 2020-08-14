@@ -10,7 +10,7 @@ It decided your output library name.
 
 You can change project name quickly by shell script:
 ```shell
-bash script/rename.sh <PorjectName>
+bash script/rename.sh <PorjectName> .
 ```
 
 There are some option of cmake:

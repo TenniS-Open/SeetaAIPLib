@@ -1,24 +1,33 @@
 #!/usr/bin/env bash
 
-usage="Usage: $0 [project_name [cmake_root]]"
+usage="Usage: $0 [project_name [cmake_path]]"
 
-cmakeroot=$2
+cmakepath=$2
 
 if [ -z "$2" ]; then
-  cmakeroot=$(pwd)
+  cmakepath=$(pwd)
 fi
 
 # find CMakeLists.txt
-# shellcheck disable=SC2010
-cmakefile=$(ls "$cmakeroot" | grep -E "(C|c)(M|m)(A|a)(K|k)(E|e)(L|l)(I|i)(S|s)(T|t)(S|s)\.(T|t)(X|x)(T|t)")
+if [ -d "$cmakepath" ]; then
+  cmakeroot=$cmakepath
+  # shellcheck disable=SC2010
+  cmakefile=$(ls "$cmakeroot" | grep -E "(C|c)(M|m)(A|a)(K|k)(E|e)(L|l)(I|i)(S|s)(T|t)(S|s)\.(T|t)(X|x)(T|t)")
+  cmakepath="$cmakeroot/$cmakefile"
 
-cmakepath="$cmakeroot/$cmakefile"
-
-if [ ! -f "$cmakepath" ]; then
-  echo "[ERROR] Can not found any CMakeLists.txt in $cmakeroot"
+  if [ ! -f "$cmakepath" ]; then
+    echo "[ERROR] Can not found any CMakeLists.txt in \"$cmakeroot\"."
+    echo "$usage"
+    exit 1
+  fi
+elif [ ! -f "$cmakepath" ]; then
+  echo "[ERROR] The path of cmake must be dir or file. Got \"$cmakepath\"."
   echo "$usage"
   exit 1
 fi
+
+cmakeroot=$(dirname "$cmakepath")
+cmakefile=$(basename "$cmakepath")
 
 # find project name
 # shellcheck disable=SC2002
@@ -57,6 +66,11 @@ fi
 
 if [ -n "$1" ]; then
   echo "Rename project($oldname) to: $newname"
+fi
+
+if [ "$newname" = "$oldname" ]; then
+  # no need to edit file.
+  exit 0
 fi
 
 expr="s/^$project_command/$project($newname)/"
