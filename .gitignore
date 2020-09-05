@@ -23,6 +23,7 @@
 /.idea
 # auto generate files
 /.api
+/.omega
 /include/*
 this_aip_load.h
 

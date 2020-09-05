@@ -8,22 +8,28 @@ set(CMAKE_CXX_STANDARD 11)
 # Output library name
 set(AIP_NAME ${PROJECT_NAME})
 # SeetaAIP API header store path
-set(AIP_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/.api)
+set(AIP_ROOT .api)
 # SeetaAIP API header git
-set(AIP_GIT https://gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP)
+set(AIP_GIT https://gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git)
 # SeetaAIP API header tag
-set(AIP_TAG "" CACHE STRING "Give git tag. If set, AIP_UPDATE will disabled.")
+set(AIP_TAG "" CACHE STRING "Give git tag/branch. Set branch for check each time, tag for init first time.")
+# Omega API header store path
+set(OMEGA_ROOT .omega)
+# Omega API header git
+set(OMEGA_GIT https://gitlab.seetatech.com/SeetaFace7/omega.git)
+# Omega API header tag
+set(OMEGA_TAG "" CACHE STRING "Give git tag/branch. Set branch for check each time, tag for init first time.")
 # ======================== Above are global options ========================== #
 mark_as_advanced(AIP_TAG)
+mark_as_advanced(OMEGA_TAG)
 
 # ======================== Those are local options ========================== #
-option(AIP_UPDATE "[Optional] Auto check if AIP header updated." ON)
-option(AIP_TEST "[Optional] If built test executable binary." OFF)
+option(AIP_OMEGA "[Optional] If include Omega." ON)
 option(AIP_TENNIS "[Optional] If link TenniS." ON)
 option(AIP_OPENCV "[Optional] If link OpenCV." OFF)
+option(AIP_TEST "[Optional] If built test executable binary." OFF)
 set(AIP_TYPE "SHARED" CACHE STRING "In SHARED or STATIC. Do ==NOT== Edit!")
 # ======================== Above are local options ========================== #
-mark_as_advanced(AIP_UPDATE)
 mark_as_advanced(AIP_TYPE)
 
 message(STATUS "========[ Configuring \"${AIP_NAME}\"")
@@ -35,47 +41,15 @@ message(STATUS "========[ (${AIP_NAME}): Build test: ${AIP_TEST}")
 # add cmake sub script root
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-# check SeetaAIP headers
-find_package(Git QUIET)
-
-if (GIT_FOUND)
-    message(STATUS "========[ (${AIP_NAME}): Found git: ${GIT_EXECUTABLE}")
+# init submodule
+include(use_submodule)
+use_submodule(SeetaAIP "${AIP_ROOT}" "${AIP_GIT}" "${AIP_TAG}")
+if (AIP_OMEGA)
+    use_submodule(Omega "${OMEGA_ROOT}" "${OMEGA_GIT}" "${OMEGA_TAG}")
 endif ()
 
-set(AIP_GIT_NEW_CLONE OFF)
-if (NOT EXISTS ${AIP_ROOT})
-    if (GIT_FOUND)
-        if ("${AIP_TAG}" STREQUAL "")
-            message(STATUS "========[ (${AIP_NAME})<SeetaAIP>: git clone \"${AIP_GIT}\"")
-            execute_process(
-                    COMMAND ${GIT_EXECUTABLE} clone "${AIP_GIT}" "${AIP_ROOT}"
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-        else ()
-            message(STATUS "========[ (${AIP_NAME})<SeetaAIP>: git clone \"${AIP_GIT}\" -b \"${AIP_TAG}\"")
-            execute_process(
-                    COMMAND ${GIT_EXECUTABLE} clone "${AIP_GIT}" "${AIP_ROOT}" -b "${AIP_TAG}"
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-        endif ()
-        set(AIP_GIT_NEW_CLONE ON)
-    else ()
-        message(FATAL_ERROR "There is no folder .api and can not found git.")
-    endif ()
-endif ()
-
-if (NOT EXISTS ${AIP_ROOT}/include)
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include)
     message(FATAL_ERROR "There exists folder .api, but no include header found in .api/include.")
-endif ()
-
-if (EXISTS ${AIP_ROOT}/.git
-        AND AIP_UPDATE
-        AND GIT_FOUND
-        AND "${AIP_TAG}" STREQUAL ""
-        AND NOT AIP_GIT_NEW_CLONE)
-    message(STATUS "========[ (${AIP_NAME})<SeetaAIP>: git pull")
-    execute_process(
-            COMMAND ${GIT_EXECUTABLE} pull
-            ERROR_QUIET
-            WORKING_DIRECTORY ${AIP_ROOT})
 endif ()
 
 # check AIP_NAME
@@ -132,9 +106,14 @@ add_library(${PROJECT_NAME}_LIB ${AIP_TYPE}
         ${${PROJECT_NAME}_SOURCE} ${${PROJECT_NAME}_PRIVATE_HEADER} ${${PROJECT_NAME}_PUBLIC_HEADER})
 
 target_include_directories(${PROJECT_NAME}_LIB
-        PRIVATE ${AIP_ROOT}/include
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
         )
+
+if (AIP_OMEGA)
+    target_include_directories(${PROJECT_NAME}_LIB
+            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${OMEGA_ROOT}/include)
+endif()
 
 if (AIP_OPENCV AND OpenCV_FOUND)
     target_include_directories(${PROJECT_NAME}_LIB PRIVATE ${OpenCV_INCLUDE_DIRS})
@@ -172,9 +151,13 @@ if (AIP_TEST)
     if (${PROJECT_NAME}_TEST_SOURCE)
         add_executable(${PROJECT_NAME}_TEST ${${PROJECT_NAME}_TEST_SOURCE})
         target_include_directories(${PROJECT_NAME}_TEST
-                PRIVATE ${AIP_ROOT}/include
+                PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include
                 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
                 )
+        if (AIP_OMEGA)
+            target_include_directories(${PROJECT_NAME}_TEST
+                    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${OMEGA_ROOT}/include)
+        endif()
         target_link_libraries(${PROJECT_NAME}_TEST ${PROJECT_NAME}_LIB)
 
         if (AIP_OPENCV AND OpenCV_FOUND)
