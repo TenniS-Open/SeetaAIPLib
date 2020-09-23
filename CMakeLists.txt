@@ -116,6 +116,10 @@ endif()
 add_library(${PROJECT_NAME}_LIB ${AIP_TYPE}
         ${${PROJECT_NAME}_SOURCE} ${${PROJECT_NAME}_PRIVATE_HEADER} ${${PROJECT_NAME}_PUBLIC_HEADER})
 
+if (WIN32)
+    set_target_properties(${PROJECT_NAME}_LIB PROPERTIES PREFIX "")
+endif ()
+
 target_include_directories(${PROJECT_NAME}_LIB
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
