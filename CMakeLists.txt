@@ -125,6 +125,8 @@ target_include_directories(${PROJECT_NAME}_LIB
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
         )
 
+target_compile_definitions(${PROJECT_NAME}_LIB PRIVATE SEETA_AIP_EXPORTS)
+
 if (AIP_OMEGA)
     target_include_directories(${PROJECT_NAME}_LIB
             PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${OMEGA_ROOT}/include)
