@@ -1,5 +1,6 @@
 #include "this_aip_load.h"
 #include "seeta_aip_package_v2.h"
+#include "seeta_aip_image.h"
 
 namespace {
     /**
@@ -67,6 +68,7 @@ namespace {
                 uint32_t method_id,
                 const std::vector<SeetaAIPImageData> &images,
                 const std::vector<SeetaAIPObject> &objects) final {
+            // use `seeta::aip::convert` to convert image to wanted format
         }
 
         /**

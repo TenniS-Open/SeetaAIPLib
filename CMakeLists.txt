@@ -27,6 +27,7 @@ mark_as_advanced(OMEGA_TAG)
 option(AIP_OMEGA "[Optional] If include Omega." ON)
 option(AIP_TENNIS "[Optional] If link TenniS." ON)
 option(AIP_OPENCV "[Optional] If link OpenCV." OFF)
+option(AIP_OPENMP "[Optional] If use OpenMP, used by image converting." ON)
 option(AIP_TEST "[Optional] If built test executable binary." OFF)
 set(AIP_TYPE "SHARED" CACHE STRING "In SHARED or STATIC. Do ==NOT== Edit!")
 # ======================== Above are local options ========================== #
@@ -88,6 +89,15 @@ endif ()
 
 if (AIP_TENNIS)
     find_package(TenniS REQUIRED)
+endif ()
+
+if (AIP_OPENMP)
+    find_package(OpenMP REQUIRED)
+    if (OpenMP_FOUND)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        include_directories(${OpenMP_CXX_INCLUDE_DIRS})
+        link_libraries(${OpenMP_CXX_LIBRARIES})
+    endif()
 endif ()
 
 # glob source files
