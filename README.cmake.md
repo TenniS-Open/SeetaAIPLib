@@ -19,22 +19,26 @@ There are some option of cmake:
     + `AIP_TEST` `[ON/OFF]` Default is `OFF`. If compile test binary.
     + `AIP_TENNIS` `[ON/OFF]` Default is `ON`. If link TenniS library.
     + `AIP_OPENCV` `[ON/OFF]` Default is `OFF`. If link OpenCV library.
+    + `AIP_OMEGA` `[ON/OFF]` Default is `ON`. If include `omega`.
+    + `AIP_OPENMP` `[ON/OFF]` Default is `ON`. If use OpenMP, used by image converting.
     
 - Advanced
-    + `AIP_UPATE` `[ON/OFF]` Default is `ON`. If Auto check `SeetaAIP` API with git.
     + `AIP_TYPE` `[SHARED/STATIC]` Default is `SHARED`.
+    + `AIP_TAG` `String` Default is empty. Checkout to given tag when configure.
+    + `OMEGA_TAG` `String` Default is empty. Checkout to given tag when configure.
     
 As well, there are some variable can be changed in `CMakeLists.txt`:
 
 - Advanced
     + `AIP_NAME` `String` Default is `${PROJECT_NAME}`. AIP module name, also the output library name.
     + `AIP_ROOT` `String` Default is `.api`. Where to put AIP header `seeta_aip.h`.
-    + `AIP_GIT` `String` Default is gitlab project URL.
-    + `AIP_TAG` `String` Default is `""`. Empty for default branch. Set for using specific tag or branch.
-    
-Notice: If `find_package` failed on `OpenCV` or `TenniS`:
+    + `AIP_GIT` `String` Default is `SeetaAIP` gitlab project URL.
+    + `OMEGA_ROOT` `String` Default is `.omega`. Where to put AIP header `ohm/*`.
+    + `OMEGA_GIT` `String` Default is `omega` gitlab project URL.
+   
+Notice: If `find_package` failed on `OpenCV`, `OpenMP` or `TenniS`:
 
-- Find `OpenCV` failed: Baidu it!
+- Find `OpenCV` or `OpenMP` failed: Baidu it!
 - Find `TenniS` failed: Define `TenniS_HOME` or edit it in GUI, which telling where the library root.
 The `TenniS_HOME` must contain `include` and `lib`.
 
