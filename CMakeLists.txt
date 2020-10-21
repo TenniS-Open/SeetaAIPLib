@@ -3,6 +3,15 @@ project(SeetaAIPLib)
 
 set(CMAKE_CXX_STANDARD 11)
 
+# ======================== Load plugin cmake ========================== #
+FILE(GLOB PLUGIN_CMAKES
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/plugin/*.cmake)
+foreach (plugin ${PLUGIN_CMAKES})
+    include(${plugin})
+endforeach()
+# ===================================================================== #
+
+
 # ======================== Those are global options ========================== #
 # Global option dot not edit, only if very needed.
 # Output library name
@@ -80,6 +89,20 @@ IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
     set(CMAKE_CXX_CREATE_SHARED_MODULE "${CMAKE_CXX_CREATE_SHARED_MODULE} -fPIC")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "NVIDIA")
+endif()
+
+if (WIN32)
+elseif (ANDROID)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti")
+elseif (IOS)
+elseif (APPLE)
+elseif (UNIX)
+    link_libraries(dl)
+else ()
 endif ()
 
 # Find library
