@@ -156,6 +156,7 @@ endif ()
 target_include_directories(${PROJECT_NAME}_LIB
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
         )
 
 target_compile_definitions(${PROJECT_NAME}_LIB PRIVATE SEETA_AIP_EXPORTS)
