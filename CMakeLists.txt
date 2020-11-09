@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD 11)
 FILE(GLOB PLUGIN_CMAKES
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/plugin/*.cmake)
 foreach (plugin ${PLUGIN_CMAKES})
+    string(REGEX MATCH "[^/\\]*$" plugin_name ${plugin})
+    message(STATUS "[plugin] ${plugin_name}")
     include(${plugin})
 endforeach()
 # ===================================================================== #
