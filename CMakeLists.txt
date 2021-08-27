@@ -138,20 +138,6 @@ if (AIP_OPENMP)
     endif()
 endif ()
 
-# check fake tennis
-if (AIP_FAKE_TENNIS)
-    FILE(GLOB_RECURSE FAKE_TENNIS_SOURCE
-            ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/src/*.cpp
-            ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/src/*.cc
-            ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/src/*.c
-            )
-    add_library(FAKE_TENNIS_LIB SHARED ${FAKE_TENNIS_SOURCE})
-    set_target_properties(FAKE_TENNIS_LIB PROPERTIES OUTPUT_NAME tennis)
-    target_include_directories(FAKE_TENNIS_LIB
-            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/include)
-    target_compile_definitions(FAKE_TENNIS_LIB PRIVATE BUILDING_TENNIS)
-endif()
-
 # glob source files
 FILE(GLOB_RECURSE ${PROJECT_NAME}_SOURCE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
@@ -206,8 +192,9 @@ if (AIP_TENNIS AND TenniS_FOUND)
 endif ()
 
 if (AIP_FAKE_TENNIS)
-    target_include_directories(${PROJECT_NAME}_LIB PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/include)
-    target_link_libraries(${PROJECT_NAME}_LIB FAKE_TENNIS_LIB)
+    add_subdirectory(fake/tennis)
+    target_include_directories(${PROJECT_NAME}_LIB PRIVATE ${FAKE_TENNIS_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME}_LIB ${FAKE_TENNIS_LIBS})
 endif()
 
 set_target_properties(${PROJECT_NAME}_LIB PROPERTIES OUTPUT_NAME ${AIP_NAME})
