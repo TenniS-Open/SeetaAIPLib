@@ -3,6 +3,9 @@
 
 ## Configuration
 
+**DO NOT clone this git repo by named URL like: http://name@git.com/SeetaAIPLib/SeetaAIPLib.git.**
+**JUST clone it without any ID informations like: http://git.com/SeetaAIPLib/SeetaAIPLib.git.**
+
 Firstly, Change project name in `Cmakelists.txt`.
 It decided your output library name.
 
@@ -67,25 +70,21 @@ This part to tell how to compile library with this cmake template.
 > First of cmake. The given example is base setting of cmake.
 > In your own project, parameter could be different by there way.
     
-### For Mac
-```
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=<path>
-make -j16
-make install
-```
-    
 ### For Linux
+
+Compatible with: Ubuntu >= 16.04, CentOS >= 7
+
+Dependencies: git, cmake, g++
+
 ```
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=<path>
-make -j16
-make install
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<path>
+cmake --build . -- -j16
+cmake --build . --target install
 ```
 
-### For Windows
+### For Windows(Visual Studio)
 
 Notice that, windows default compiler is MSVC.
 If you want other compiler, use `cmake -G <Generator>`.
@@ -107,7 +106,28 @@ Then you can find out how to use it.
 If choose `Visual Studio` generators, open `sln` to compile library with GUI.
 If choose other generators, compile library by generator's given way.
 
-#### With CMD
+#### With PWSH(PowerShell)[Recommended]
+
+First, setup VS environment.
+```
+&script/pwsh/setup_vcvars.ps1 vs2015 x64
+```
+> Usage: <command> version [arch]  
+> [version]: vs2013 | vs2015 | vs2017 | vs2019  
+> [arch]: x86 | {amd64} | x86_amd64 | x86_arm | x86_arm64 | amd64_x86 | amd64_arm | amd64_arm64  
+> Notice: before use this script, please install according Visual Studio and create Shotcut at Start Menu by default.  
+
+Then, using cmake to build target.
+
+```
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<path>
+cmake --build . -- -j16
+cmake --build . --target install
+```
+
+#### With CMD(custom manual)
 First, setup environment according to used generator.
 
 - `Visual Studio 14 2015`: No need to set ENV, cmake will auto check MSVC.
@@ -131,7 +151,7 @@ Then, generate project file by cmake.
 
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=<path> -G <Generator>
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<path> -G <Generator>
 ```
 
 In the most time, run following command to compile and install.
@@ -168,6 +188,27 @@ Well, with different generators, there are different ways:
 - `MSYS Makefiles` or `MinGW Makefiles`: Command `make` or `mingw32-make` in `MSYS` or `MinGW` environment.
 - Other generators: baidu them as well.
 
+### For Windows(MinGW)
+
+There are many MinGW(MinGW32 or MinGW64) achieves:
+[Mingw-w64](http://www.mingw-w64.org/),
+[Cygwin](https://cygwin.com/),
+[TDM-GCC](https://jmeubank.github.io/tdm-gcc/),
+[MSYS2](https://www.msys2.org/),
+etc.
+
+We recommend using `MSYS2`, which has built-in `pacman` to manage dependency libraries.
+
+After setup MinGW envriment, use cmake to build it easily.
+
+```
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<path>
+cmake --build . -- -j16
+cmake --build . --target install
+```
+
 ### For Android
 
 Well `NDK` is need by anyway. View the website for more information.
@@ -182,12 +223,13 @@ export ANDROID_NDK=<path to NDK>
 mkdir build
 cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=<path> \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake \
     -DANDROID_ABI="arm64-v8a" \
     -DANDROID_PLATFORM=android-19 \
     -DANDROID_STL=c++_static \
     -DANDROID_ARM_NEON=ON
-cmake --build .
+cmake --build . -- -j16
 cmake --build . --target install
 ```
 
@@ -199,6 +241,7 @@ set "ANDROID_NDK=<path to NDK>"
 mkdir build
 cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=<path> ^
+    -DCMAKE_BUILD_TYPE=Release ^
     -G"Unix Makefiles" ^
     -DCMAKE_TOOLCHAIN_FILE=%ANDROID_NDK%/build/cmake/android.toolchain.cmake ^
     -DCMAKE_MAKE_PROGRAM=%ANDROID_NDK%/prebuilt/windows-x86_64/bin/make.exe ^
@@ -206,7 +249,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=<path> ^
     -DANDROID_PLATFORM=android-19 ^
     -DANDROID_STL=c++_static ^
     -DANDROID_ARM_NEON=ON
-cmake --build .
+cmake --build .  -- -j16
 cmake --build . --target install
 ```
 
@@ -231,17 +274,38 @@ There are some useful android system version and API version.
 | Pie | 9.0 | 28 | 2018-08-01 |
 | Q | 10.0 | 29 | 2019-9-03 |
 
-### For IOS
+### For Darwin(or MacOSX)
 
-Following commands only work in `MacOS`:
+Dependencies: git, cmake, Xcode(provide clang)
+
 ```
 mkdir build
-cd builds
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=<path>
+cmake --build . -- -j16
+cmake --build . --target install
+```
+
+### For IOS
+
+Dependencies: `Darwin(or MacOSX)`, git, cmake, Xcode(provide clang)
+
+Following commands only work in `Darwin(or MacOSX)`:
+```
+export TARGET=9
+export ENABLE_BITCODE=0
+export PLATFORM=OS
+export ARCH="armv7;armv7s;arm64"
+mkdir build
+cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=<path> \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_TOOLCHAIN_FILE=../toolchain/iOS.cmake \
-    -DIOS_DEPLOYMENT_TARGET=9 \
-    -DENABLE_BITCODE=0
-cmake --build .
+    -DIOS_DEPLOYMENT_TARGET=$TARGET \
+    -DIOS_PLATFORM=$PLATFORM \
+    -DENABLE_BITCODE=$ENABLE_BITCODE \
+    -DIOS_ARCH="$ARCH"
+cmake --build . -- -j16
 cmake --build . --target install
 ```
 
@@ -271,9 +335,90 @@ Here is the default `IOS_ARCH` of `IOS_PLATFORM`:
 
 ### Cross compilation
 
-#### ARM on x86
+#### ARM on Ubuntu host
 
-Waiting to upload.
+Dependencies: git, cmake,
+g++-arm-linux-gnueabi(for armv7a with -mfloat-abi=softfp),
+g++-arm-linux-gnueabihf(for armv7a with -mfloat-abi=hard),
+g++-aarch64-linux-gnu(for aarch64(armv8)).
+
+We provide cross compile toolchain(on ubuntu host):
+
+| Toolchain | Target |
+| :---: | :---: |
+| toolchain/arm-linux-gnueabi.cmake | armv7a(-mfloat-abi=softfp) |
+| toolchain/arm-linux-gnueabihf.cmake | armv7a(-mfloat-abi=hard) |
+| toolchain/aarch64-linux-gnu.cmake | aarch64 |
+
+Compile aarch64 using the following script:
+```
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=<path> \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=../toolchain/aarch64-linux-gnu.cmake
+cmake --build . -- -j16
+cmake --build . --target install
+```
+Change toolchain to according target.
+
+#### MinGW(x86) on Ubuntu host
+
+Dependencies: git, cmake,
+mingw-w64-i686-dev(for i686 and x86),
+mingw-w64-x86-64-dev(for x86-64 and amd64),
+
+We provide cross compile toolchain(on ubuntu host):
+
+| Toolchain | Target |
+| :---: | :---: |
+| toolchain/MinGW-i686.cmake | i686 |
+| toolchain/MinGW-x86_64.cmake | x86_64 |
+
+Compile x86_64 using the following script:
+```
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=<path> \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_TOOLCHAIN_FILE=../toolchain/MinGW-x86_64.cmake
+cmake --build . -- -j16
+cmake --build . --target install
+```
+Change toolchain to according target.
+
+For actully usage in windows, there may be some dependent DLLs to copy.
+
+For x86_64 in ubuntu20.04 hosted:
+```
+/usr/x86_64-w64-mingw32/lib/libwinpthread-1.dll
+/usr/lib/gcc/x86_64-w64-mingw32/9.3-posix/libgcc_s_seh-1.dll
+/usr/lib/gcc/x86_64-w64-mingw32/9.3-posix/libgomp-1.dll
+/usr/lib/gcc/x86_64-w64-mingw32/9.3-posix/libstdc++-6.dll
+```
+For i686 in ubuntu20.04 hosted:
+```
+/usr/i686-w64-mingw32/lib/libwinpthread-1.dll
+/usr/lib/gcc/i686-w64-mingw32/9.3-posix/libgcc_s_sjlj-1.dll
+/usr/lib/gcc/i686-w64-mingw32/9.3-posix/libgomp-1.dll
+/usr/lib/gcc/i686-w64-mingw32/9.3-posix/libstdc++-6.dll
+```
+
+> Notice: the cross gcc version (like `9.3`) will deferent in other system. Use `locate` to find them.
+
+## Windows platform packaging
+
+Use [script/pwsh/fusion.ps1](script/pwsh/fusion.ps1) to fusion dll (or exe) references to present directory.
+
+Usage example in PWSH(Powershell):
+```
+&script/pwsh/fusion.ps1 target.dll
+```
+
+> Fusion dll (or exe) references to present directory.  
+> Usage: <command> target  
+> [target]: path to target dll or exe.  
+> Notice: The search order is: %PATH%, C:\Windows\System32, C:\Windows\SysWOW64  
 
 ## Install
 
