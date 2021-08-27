@@ -40,15 +40,24 @@ option(AIP_TENNIS "[Optional] If link TenniS." ON)
 option(AIP_OPENCV "[Optional] If link OpenCV." OFF)
 option(AIP_OPENMP "[Optional] If use OpenMP, used by image converting." ON)
 option(AIP_TEST "[Optional] If built test executable binary." OFF)
+option(AIP_FAKE_TENNIS "[Optional] If link fake TenniS. Be carefully, it's only used for CI." OFF)
 set(AIP_TYPE "SHARED" CACHE STRING "In SHARED or STATIC. Do ==NOT== Edit!")
 # ======================== Above are local options ========================== #
 mark_as_advanced(AIP_TYPE)
+
+# Check if there is an fake option
+if (AIP_FAKE_TENNIS)
+    set(AIP_TENNIS OFF)
+endif()
 
 message(STATUS "========[ Configuring \"${AIP_NAME}\"")
 message(STATUS "========[ (${AIP_NAME}): Library type: ${AIP_TYPE}")
 message(STATUS "========[ (${AIP_NAME}): Link TenniS: ${AIP_TENNIS}")
 message(STATUS "========[ (${AIP_NAME}): Link OpenCV: ${AIP_OPENCV}")
 message(STATUS "========[ (${AIP_NAME}): Build test: ${AIP_TEST}")
+if (AIP_FAKE_TENNIS)
+    message(STATUS "========[ (${AIP_NAME}): Link fake TenniS: ${AIP_FAKE_TENNIS}")
+endif()
 
 # add cmake sub script root
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -129,6 +138,20 @@ if (AIP_OPENMP)
     endif()
 endif ()
 
+# check fake tennis
+if (AIP_FAKE_TENNIS)
+    FILE(GLOB_RECURSE FAKE_TENNIS_SOURCE
+            ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/src/*.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/src/*.cc
+            ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/src/*.c
+            )
+    add_library(FAKE_TENNIS_LIB SHARED ${FAKE_TENNIS_SOURCE})
+    set_target_properties(FAKE_TENNIS_LIB PROPERTIES OUTPUT_NAME tennis)
+    target_include_directories(FAKE_TENNIS_LIB
+            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/include)
+    target_compile_definitions(FAKE_TENNIS_LIB PRIVATE BUILDING_TENNIS)
+endif()
+
 # glob source files
 FILE(GLOB_RECURSE ${PROJECT_NAME}_SOURCE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
@@ -181,6 +204,11 @@ if (AIP_TENNIS AND TenniS_FOUND)
     target_include_directories(${PROJECT_NAME}_LIB PRIVATE ${TenniS_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME}_LIB ${TenniS_LIBS})
 endif ()
+
+if (AIP_FAKE_TENNIS)
+    target_include_directories(${PROJECT_NAME}_LIB PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fake/tennis/include)
+    target_link_libraries(${PROJECT_NAME}_LIB FAKE_TENNIS_LIB)
+endif()
 
 set_target_properties(${PROJECT_NAME}_LIB PROPERTIES OUTPUT_NAME ${AIP_NAME})
 set_target_properties(${PROJECT_NAME}_LIB PROPERTIES
