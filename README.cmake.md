@@ -273,6 +273,8 @@ There are some useful android system version and API version.
 | Oreo | 8.0 | 26 | 2017-08-01 |
 | Pie | 9.0 | 28 | 2018-08-01 |
 | Q | 10.0 | 29 | 2019-9-03 |
+| R | 11.0 | 30 | 2020-10-23 |
+| Android 12 | 12.0 | 31 | - |
 
 ### For Darwin(or MacOSX)
 
