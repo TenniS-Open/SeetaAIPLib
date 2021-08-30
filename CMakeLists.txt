@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 2.7)
 project(SeetaAIPLib)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -21,13 +21,13 @@ set(AIP_NAME ${PROJECT_NAME})
 # SeetaAIP API header store path
 set(AIP_ROOT .api)
 # SeetaAIP API header git
-set(AIP_GIT https://gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git)
+set(AIP_GIT https://gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git CACHE STRING)
 # SeetaAIP API header tag
 set(AIP_TAG "" CACHE STRING "Give git tag/branch. Set branch for check each time, tag for init first time.")
 # Omega API header store path
 set(OMEGA_ROOT .omega)
 # Omega API header git
-set(OMEGA_GIT https://gitlab.seetatech.com/SeetaFace7/omega.git)
+set(OMEGA_GIT https://gitlab.seetatech.com/SeetaFace7/omega.git CACHE STRING)
 # Omega API header tag
 set(OMEGA_TAG "" CACHE STRING "Give git tag/branch. Set branch for check each time, tag for init first time.")
 # ======================== Above are global options ========================== #
@@ -130,7 +130,7 @@ if (AIP_TENNIS)
 endif ()
 
 if (AIP_OPENMP)
-    find_package(OpenMP REQUIRED)
+    find_package(OpenMP)
     if (OpenMP_FOUND)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
         include_directories(${OpenMP_CXX_INCLUDE_DIRS})
