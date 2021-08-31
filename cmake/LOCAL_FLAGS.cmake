@@ -1,0 +1,11 @@
+# set flags
+
+
+IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
+        OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    include(FLAGS_GCC)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    include(FLAGS_MSVC)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "NVIDIA")
+endif()
+

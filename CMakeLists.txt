@@ -34,6 +34,15 @@ set(OMEGA_TAG "" CACHE STRING "Give git tag/branch. Set branch for check each ti
 mark_as_advanced(AIP_TAG)
 mark_as_advanced(OMEGA_TAG)
 
+# ============================= Common flags ================================ #
+set(PLATFORM "auto" CACHE STRING "auto, x86, x64, arm-*")
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+    set(CONFIGURATION "Release")
+else ()
+    set(CONFIGURATION ${CMAKE_BUILD_TYPE})
+endif ()
+# ============================= Common flags ================================ #
+
 # ======================== Those are local options ========================== #
 option(AIP_OMEGA "[Optional] If include Omega." ON)
 option(AIP_TENNIS "[Optional] If link TenniS." ON)
@@ -51,6 +60,10 @@ if (AIP_FAKE_TENNIS)
 endif()
 
 message(STATUS "========[ Configuring \"${AIP_NAME}\"")
+
+message(STATUS "========[ (${AIP_NAME}): Platform: ${PLATFORM}")
+message(STATUS "========[ (${AIP_NAME}): Configuration: ${CONFIGURATION}")
+
 message(STATUS "========[ (${AIP_NAME}): Library type: ${AIP_TYPE}")
 message(STATUS "========[ (${AIP_NAME}): Link TenniS: ${AIP_TENNIS}")
 message(STATUS "========[ (${AIP_NAME}): Link OpenCV: ${AIP_OPENCV}")
@@ -61,6 +74,10 @@ endif()
 
 # add cmake sub script root
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+# setup flags and env
+include(LOCAL_FLAGS)
+include(LOCAL_ENV)
 
 # init submodule
 include(use_submodule)
@@ -91,31 +108,9 @@ configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/this_aip_load.h
 )
 
-# set default flag
-IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-        OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
-    set(CMAKE_CXX_CREATE_SHARED_LIBRARY "${CMAKE_CXX_CREATE_SHARED_LIBRARY} -fPIC")
-    set(CMAKE_CXX_CREATE_SHARED_MODULE "${CMAKE_CXX_CREATE_SHARED_MODULE} -fPIC")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-	if (ANDROID)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-command-line-argument")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-command-line-argument")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti")
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s")
-	endif ()
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3")
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "NVIDIA")
-endif()
-
 if (WIN32)
 elseif (ANDROID)
+    link_libraries(log)
 elseif (IOS)
 elseif (APPLE)
 elseif (UNIX)
@@ -200,17 +195,17 @@ if (AIP_FAKE_TENNIS)
     target_link_libraries(${PROJECT_NAME}_LIB ${FAKE_TENNIS_LIBS})
 endif()
 
-set_target_properties(${PROJECT_NAME}_LIB PROPERTIES OUTPUT_NAME ${AIP_NAME})
+set_target_properties(${PROJECT_NAME}_LIB PROPERTIES OUTPUT_NAME ${AIP_NAME}${ENV_SUFFIX})
 set_target_properties(${PROJECT_NAME}_LIB PROPERTIES
-         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
+         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_RUNTIME_DIR}"
+         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_LIBRARY_DIR}"
+         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_ARCHIVE_DIR}"
          )
 
 install(TARGETS ${PROJECT_NAME}_LIB
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION ${ENV_RUNTIME_DIR}
+        LIBRARY DESTINATION ${ENV_LIBRARY_DIR}
+        ARCHIVE DESTINATION ${ENV_ARCHIVE_DIR}
         FRAMEWORK DESTINATION framework
         )
 
@@ -242,9 +237,9 @@ if (AIP_TEST)
 
         set_target_properties(${PROJECT_NAME}_TEST PROPERTIES OUTPUT_NAME test_${AIP_NAME})
         set_target_properties(${PROJECT_NAME}_TEST PROPERTIES
-                RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-                LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-                ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib"
+                RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_RUNTIME_DIR}"
+                LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_LIBRARY_DIR}"
+                ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_ARCHIVE_DIR}"
                 )
     endif()
 endif()
