@@ -21,13 +21,13 @@ set(AIP_NAME ${PROJECT_NAME})
 # SeetaAIP API header store path
 set(AIP_ROOT .api)
 # SeetaAIP API header git
-set(AIP_GIT https://gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git CACHE STRING)
+set(AIP_GIT https://gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git CACHE STRING "Git URL to clone SeetaAIP.")
 # SeetaAIP API header tag
 set(AIP_TAG "" CACHE STRING "Give git tag/branch. Set branch for check each time, tag for init first time.")
 # Omega API header store path
 set(OMEGA_ROOT .omega)
 # Omega API header git
-set(OMEGA_GIT https://gitlab.seetatech.com/SeetaFace7/omega.git CACHE STRING)
+set(OMEGA_GIT https://gitlab.seetatech.com/SeetaFace7/omega.git CACHE STRING "Git URL to clone omega.")
 # Omega API header tag
 set(OMEGA_TAG "" CACHE STRING "Give git tag/branch. Set branch for check each time, tag for init first time.")
 # ======================== Above are global options ========================== #

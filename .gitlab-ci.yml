@@ -11,9 +11,9 @@ stages:
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
   THREADS: '4'
-  AIP_GIT: 'https://"$CI_REGISTRY_USER":"$CI_REGISTRY_PASSWORD"@gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git'
-  OMEGA_GIT: 'https://"$CI_REGISTRY_USER":"$CI_REGISTRY_PASSWORD"@gitlab.seetatech.com/SeetaFace7/omega.git'
-  CMAKE_FLAGS: '-DAIP_FAKE_TENNIS=ON -DAIP_GIT=${AIP_GIT} -DOMEGA_GIT=${OMEGA_GIT}'
+  AIP_GIT: 'https://"${CI_REGISTRY_USER}":"${CI_REGISTRY_PASSWORD}"@gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git'
+  OMEGA_GIT: 'https://"${CI_REGISTRY_USER}":"${CI_REGISTRY_PASSWORD}"@gitlab.seetatech.com/SeetaFace7/omega.git'
+  CMAKE_FLAGS: '-DAIP_FAKE_TENNIS=ON, -DAIP_GIT=${AIP_GIT}, -DOMEGA_GIT=${OMEGA_GIT}'
   
   
 .only_config:
