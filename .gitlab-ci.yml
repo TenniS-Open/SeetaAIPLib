@@ -11,10 +11,10 @@ stages:
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
   THREADS: '4'
-  AIP_GIT: 'https://"${CI_REGISTRY_USER}":"${CI_REGISTRY_PASSWORD}"@gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git'
-  OMEGA_GIT: 'https://"${CI_REGISTRY_USER}":"${CI_REGISTRY_PASSWORD}"@gitlab.seetatech.com/SeetaFace7/omega.git'
-  CMAKE_FLAGS: '-DAIP_FAKE_TENNIS=ON, -DAIP_GIT=${AIP_GIT}, -DOMEGA_GIT=${OMEGA_GIT}'
-  
+  CMAKE_SETTING: |
+    set(AIP_FAKE_TENNIS ON CACHE BOOL "")
+    set(AIP_GIT https://"${CI_REGISTRY_USER}":"${CI_REGISTRY_PASSWORD}"@gitlab.seetatech.com/SeetaAIoTBase/SeetaAIP.git CACHE STRING "")
+    set(OMEGA_GIT https://"${CI_REGISTRY_USER}":"${CI_REGISTRY_PASSWORD}"@gitlab.seetatech.com/SeetaFace7/omega.git CACHE STRING "")
   
 .only_config:
   only: &only_config
@@ -274,8 +274,10 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
+    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
-       $CMAKE_FLAGS'
+       -C cmake_seting.cmake'
     - cmake --build . --target install -- -j $THREADS
 
   artifacts: &linux_artifacts_config
@@ -290,9 +292,11 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
+    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=../toolchain/MinGW-$ARCH.cmake 
-       $CMAKE_FLAGS'
+       -C cmake_seting.cmake'
     - cmake --build . --target install -- -j $THREADS
     # Copy ref DLLs to artifacts.
     - if [ ! -d "$ARTIFACTS/bin" ]; then mkdir "$ARTIFACTS/bin"; fi
@@ -315,9 +319,11 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
+    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=../toolchain/MinGW-$ARCH.cmake 
-       $CMAKE_FLAGS'
+       -C cmake_seting.cmake'
     - cmake --build . --target install -- -j $THREADS
     # Copy ref DLLs to artifacts. Notice that GCC is assumed version 9.3 in Ubuntu20.04.
     - if [ ! -d "$ARTIFACTS/bin" ]; then mkdir "$ARTIFACTS/bin"; fi
@@ -337,6 +343,8 @@ variables:
     - export ANDROID_PLATFORM=19
     - mkdir build_armv7
     - pushd build_armv7
+    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake 
        -DANDROID_ABI="armeabi-v7a" 
@@ -344,11 +352,13 @@ variables:
        -DANDROID_STL=c++_static 
        -DANDROID_ARM_NEON=ON 
        -DPLATFORM="armeabi-v7a" 
-       $CMAKE_FLAGS'
+       -C cmake_seting.cmake'
     - cmake --build . --target install -- -j $THREADS
     - popd
     - mkdir build_armv8
     - pushd build_armv8
+    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS 
        -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake 
@@ -368,8 +378,10 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
+    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
-       $CMAKE_FLAGS'
+       -C cmake_seting.cmake'
     - cmake --build . --target install -- -j $THREADS
 
 .ios9_build_config:
@@ -383,13 +395,15 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
+    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=../toolchain/iOS.cmake 
        -DIOS_DEPLOYMENT_TARGET=$TARGET
        -DIOS_PLATFORM=$PLATFORM
        -DENABLE_BITCODE=$ENABLE_BITCODE
        -DIOS_ARCH="$ARCH"
-       $CMAKE_FLAGS'
+       -C cmake_seting.cmake'
     - cmake --build . --target install -- -j $THREADS
 
 .windows_build_config:
@@ -409,9 +423,11 @@ variables:
     - cmake --version
     - mkdir build > $null
     - pushd build
+    - Invoke-Expression "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX="${ARTIFACTS}" -DCMAKE_BUILD_TYPE=Release
        -G "NMake Makefiles"
-      $CMAKE_FLAGS'
+       -C cmake_seting.cmake'
     - cmake --build . --target install
     - popd
     - '&script\pwsh\fusion_v2.ps1 $ARTIFACTS\bin'
@@ -425,9 +441,11 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
+    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX="${ARTIFACTS}" -DCMAKE_BUILD_TYPE=Release
        -DCMAKE_TOOLCHAIN_FILE=${TOOLCAHIN}"
-       $CMAKE_FLAGS'
+       -C cmake_seting.cmake'
     - cmake --build . --target install -- -j $THREADS
 
 
