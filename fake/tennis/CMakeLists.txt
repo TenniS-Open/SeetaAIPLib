@@ -1,6 +1,8 @@
 # ======================== Fake TenniS ========================== #
 # Script will setup FAKE_TENNIS_LIBS and FAKE_TENNIS_INCLUDE_DIRS
 
+set(CMAKE_CXX_STANDARD 11)
+
 FILE(GLOB_RECURSE FAKE_TENNIS_SOURCE
 		${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
 		${CMAKE_CURRENT_LIST_DIR}/src/*.cc

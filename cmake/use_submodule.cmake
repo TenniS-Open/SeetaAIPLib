@@ -5,6 +5,14 @@ find_package(Git QUIET)
 
 if (GIT_FOUND)
     message(STATUS "========[ (${PROJECT_NAME}): Found git: ${GIT_EXECUTABLE}")
+else ()
+    execute_process(
+        COMMAND git --version
+        RESULT_VARIABLE if_failed)
+    if (not if_failed)
+        set(GIT_EXECUTABLE git)
+        set(GIT_FOUND TRUE)
+    endif ()
 endif ()
 
 function(git_checkout root tag)
