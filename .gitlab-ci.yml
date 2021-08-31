@@ -20,6 +20,10 @@ variables:
   only: &only_config
     - /^r\d+\.\d+\W?/
     - ci
+    
+.MAY_ALLOW_FAILURE:
+  allow_failure: &may_allow_failure
+    true
 
 .common_artifacts: &common_artifacts_config
   name: '${CI_PROJECT_NAME}-${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}'
@@ -507,6 +511,7 @@ ubuntu16.04-amd64:
   only: *only_config
   script: *linux_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
   
   
 ubuntu18.04-amd64:
@@ -517,6 +522,7 @@ ubuntu18.04-amd64:
   only: *only_config
   script: *linux_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
   
   
 ubuntu20.04-amd64:
@@ -527,6 +533,7 @@ ubuntu20.04-amd64:
   only: *only_config
   script: *linux_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
 
 
 mingw-x86_64:
@@ -537,6 +544,7 @@ mingw-x86_64:
   only: *only_config
   script: *mingw-x86_64_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
 
   
 mingw-i686:
@@ -547,6 +555,7 @@ mingw-i686:
   only: *only_config
   script: *mingw-i686_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
   
   
 centos7-amd64:
@@ -557,6 +566,7 @@ centos7-amd64:
   only: *only_config
   script: *linux_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
   
   
 centos8-amd64:
@@ -567,6 +577,7 @@ centos8-amd64:
   only: *only_config
   script: *linux_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
   
   
 android19-arm:
@@ -578,6 +589,7 @@ android19-arm:
   script: *android19_build_script_config
   cache: *android_cache_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
 
 
 darwin-amd64:
@@ -588,6 +600,7 @@ darwin-amd64:
   before_script: *darwin_before_script
   script: *darwin_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
 
 
 ios9-arm:
@@ -598,6 +611,7 @@ ios9-arm:
   before_script: *darwin_before_script
   script: *ios9_build_script_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
 
 windows_vs2019-x64:
   stage: build
@@ -607,6 +621,7 @@ windows_vs2019-x64:
   before_script: *windows_setup_vs2019_x64
   script: *windows_build_script_config
   artifacts: *windows_artifacts_config
+  allow_failure: *may_allow_failure
 
 windows_vs2019-x86:
   stage: build
@@ -616,6 +631,7 @@ windows_vs2019-x86:
   before_script: *windows_setup_vs2019_x86
   script: *windows_build_script_config
   artifacts: *windows_artifacts_config
+  allow_failure: *may_allow_failure
 
 
 ubuntu16.04-armv7a:
@@ -627,6 +643,7 @@ ubuntu16.04-armv7a:
   before_script: *linux_armv7a_before_script
   script: *linux_arm_build_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
 
 
 ubuntu16.04-aarch64:
@@ -638,4 +655,5 @@ ubuntu16.04-aarch64:
   before_script: *linux_aarch64_before_script
   script: *linux_arm_build_config
   artifacts: *linux_artifacts_config
+  allow_failure: *may_allow_failure
 
