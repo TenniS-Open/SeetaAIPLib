@@ -9,10 +9,13 @@ else ()
     execute_process(
         COMMAND git --version
         RESULT_VARIABLE if_failed)
-    if (not if_failed)
+    if (if_failed)
+        message(STATUS "========[ (${PROJECT_NAME}): Git not found.")
+    else ()
         set(GIT_EXECUTABLE git)
         set(GIT_FOUND TRUE)
     endif ()
+    unset(if_failed)
 endif ()
 
 function(git_checkout root tag)
