@@ -274,7 +274,7 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
-    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - eval "echo \"${CMAKE_SETTING}\"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -C cmake_seting.cmake'
@@ -292,7 +292,7 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
-    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - eval "echo \"${CMAKE_SETTING}\"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=../toolchain/MinGW-$ARCH.cmake 
@@ -319,7 +319,7 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
-    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - eval "echo \"${CMAKE_SETTING}\"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=../toolchain/MinGW-$ARCH.cmake 
@@ -343,7 +343,7 @@ variables:
     - export ANDROID_PLATFORM=19
     - mkdir build_armv7
     - pushd build_armv7
-    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - eval "echo \"${CMAKE_SETTING}\"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK}/build/cmake/android.toolchain.cmake 
@@ -357,7 +357,7 @@ variables:
     - popd
     - mkdir build_armv8
     - pushd build_armv8
-    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - eval "echo \"${CMAKE_SETTING}\"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS 
        -DCMAKE_BUILD_TYPE=Release 
@@ -378,7 +378,7 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
-    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - eval "echo \"${CMAKE_SETTING}\"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -C cmake_seting.cmake'
@@ -395,7 +395,7 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
-    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - eval "echo \"${CMAKE_SETTING}\"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX=$ARTIFACTS -DCMAKE_BUILD_TYPE=Release 
        -DCMAKE_TOOLCHAIN_FILE=../toolchain/iOS.cmake 
@@ -423,7 +423,7 @@ variables:
     - cmake --version
     - mkdir build > $null
     - pushd build
-    - Invoke-Expression "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - Invoke-Expression "echo `"${CMAKE_SETTING}`"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX="${ARTIFACTS}" -DCMAKE_BUILD_TYPE=Release
        -G "NMake Makefiles"
@@ -441,7 +441,7 @@ variables:
     - cmake --version
     - mkdir build
     - cd build
-    - eval "echo ${CMAKE_SETTING}" > cmake_seting.cmake
+    - eval "echo \"${CMAKE_SETTING}\"" > cmake_seting.cmake
     - cat cmake_seting.cmake
     - 'cmake .. -DCMAKE_INSTALL_PREFIX="${ARTIFACTS}" -DCMAKE_BUILD_TYPE=Release
        -DCMAKE_TOOLCHAIN_FILE=${TOOLCAHIN}"
