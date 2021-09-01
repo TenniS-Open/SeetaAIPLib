@@ -19,7 +19,11 @@ variables:
 .only_config:
   only: &only_config
     - /^r\d+\.\d+\W?/
-    - ci
+    - api
+    - schedules
+    - triggers
+    - web
+    # - ci
     
 .MAY_ALLOW_FAILURE:
   allow_failure: &may_allow_failure
