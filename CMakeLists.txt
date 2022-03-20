@@ -220,7 +220,7 @@ if (IOS)
         FRAMEWORK TRUE
         FRAMEWORK_VERSION A
         MACOSX_FRAMEWORK_IDENTIFIER "top.leval.${PROJECT_NAME}"
-        MACOSX_FRAMEWORK_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/template/Info.plist.in
+        MACOSX_FRAMEWORK_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/template/Info.plist.in"
         # "current version" in semantic format in Mach-O binary file
         VERSION "${AIP_VERSION}"
         # "compatibility version" in semantic format in Mach-O binary file
