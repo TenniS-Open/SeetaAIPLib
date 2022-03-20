@@ -18,6 +18,8 @@ endforeach()
 # Global option dot not edit, only if very needed.
 # Output library name
 set(AIP_NAME ${PROJECT_NAME})
+# Output library version
+set(AIP_VERSION "0.0.1")
 # SeetaAIP API header store path
 set(AIP_ROOT .api)
 # SeetaAIP API header git
@@ -208,6 +210,29 @@ FILE(GLOB_RECURSE ${PROJECT_NAME}_AIP_HEADER
     ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include/*.hh
     ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include/*.h
     )
+
+# build ios framework
+if (IOS)
+    if ("${IOS_DEPLOYMENT_TARGET}" STREQUAL "")
+        set(IOS_DEPLOYMENT_TARGET "9")
+    endif()
+    set_target_properties(${PROJECT_NAME}_LIB PROPERTIES
+        FRAMEWORK TRUE
+        FRAMEWORK_VERSION A
+        MACOSX_FRAMEWORK_IDENTIFIER "top.leval.${PROJECT_NAME}"
+        MACOSX_FRAMEWORK_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/template/Info.plist.in
+        # "current version" in semantic format in Mach-O binary file
+        VERSION "${AIP_VERSION}"
+        # "compatibility version" in semantic format in Mach-O binary file
+        SOVERSION "${AIP_VERSION}"
+        PUBLIC_HEADER "${${PROJECT_NAME}_AIP_HEADER}"
+        XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer"
+    )
+    install(FILES ${${PROJECT_NAME}_AIP_HEADER}
+            DESTINATION "framework/${PROJECT_NAME}.framework/Headers/aip")
+    install(FILES ${${PROJECT_NAME}_PUBLIC_HEADER}
+            DESTINATION "framework/${PROJECT_NAME}.framework/Headers")
+endif()
 
 install(FILES ${${PROJECT_NAME}_AIP_HEADER}
         DESTINATION ${ENV_HEADER_DIR}/aip)
