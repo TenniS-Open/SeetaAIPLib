@@ -15,6 +15,6 @@ $PROJECT = "$CurrentyDir\..\.."
 
 &"$CurrentyDir\..\pwsh\setup_vcvars.ps1" "$COMPILER" "$ARCH"
 
-cmake "$PROJECT" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DTS_DYNAMIC_INSTRUCTION=ON -DAIP_FAKE_TENNIS="${FAKE_TENNIS}" $args
+cmake "$PROJECT" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DAIP_FAKE_TENNIS="${FAKE_TENNIS}" $args
 
 
