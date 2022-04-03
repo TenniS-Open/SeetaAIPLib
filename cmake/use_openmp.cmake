@@ -6,7 +6,7 @@ if (MINGW)
 
     set(OPENMP_LIBRARY)
 elseif (IOS)
-    message(FATAL_ERROR "IOS not supported OpenMP")
+    message(WARNING "IOS not supported OpenMP")
 elseif (APPLE)
     # For the libomp installed by brew
     include_directories("/usr/local/opt/libomp/include")
@@ -33,7 +33,7 @@ else ()
     set(OPENMP_LIBRARY)
 endif ()
 
-if (DEFINED ANDROID_NDK_MAJOR AND ${ANDROID_NDK_MAJOR} GREATER 20)
+if (DEFINED ANDROID_NDK_MAJOR AND "${ANDROID_NDK_MAJOR}" GREATER 20)
     message(STATUS "-static-openmp")
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static-openmp")
     set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} -static-openmp")
