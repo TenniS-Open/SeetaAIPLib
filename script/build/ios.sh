@@ -42,6 +42,9 @@ if [ -z "$TMP" ]; then
     TMP="/tmp/$PNAME"
 fi
 
+rm -rf "$TMP"
+mkdir -p "$TMP"
+
 echo "[INFO] build tmp: $TMP"
 
 N=${#SCRIPTS[@]}
