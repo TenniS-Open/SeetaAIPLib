@@ -1,6 +1,8 @@
 # SeetaAIP Library
 > Introduction SeetaAIP(AI Package)
 
+[![License](https://img.shields.io/badge/license-BSD-blue.svg)](LICENSE)
+
 ## Introduction
 
 This is C++ template project, which used to build AIP.
