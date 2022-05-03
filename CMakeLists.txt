@@ -112,6 +112,8 @@ configure_file(
 
 if (WIN32)
 elseif (ANDROID)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s")
     link_libraries(log)
 elseif (IOS)
     set(CMAKE_MACOSX_RPATH 1)
