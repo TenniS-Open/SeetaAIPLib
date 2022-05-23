@@ -252,28 +252,45 @@ if (AIP_TEST)
             ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cc
             ${CMAKE_CURRENT_SOURCE_DIR}/test/*.c
             )
-    if (${PROJECT_NAME}_TEST_SOURCE)
-        add_executable(${PROJECT_NAME}_TEST ${${PROJECT_NAME}_TEST_SOURCE})
-        target_include_directories(${PROJECT_NAME}_TEST
+    LIST(LENGTH ${PROJECT_NAME}_TEST_SOURCE ${PROJECT_NAME}_TEST_NUMBER)
+
+    foreach (path ${${PROJECT_NAME}_TEST_SOURCE})
+        string(REGEX MATCH "[^/]*.[(c)|(cc)|(cpp)]$" file_ext ${path})
+        string(REGEX MATCH "^[^.]*" file ${file_ext})
+
+        if (${${PROJECT_NAME}_TEST_NUMBER} EQUAL 1)
+            set(TEST_NAME ${PROJECT_NAME}_test)
+        else()
+            set(TEST_NAME ${PROJECT_NAME}_test_${file})
+        endif()
+
+        add_executable(${TEST_NAME} ${path})
+
+        target_include_directories(${TEST_NAME}
                 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include
                 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+                PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
                 )
+
         if (AIP_OMEGA)
-            target_include_directories(${PROJECT_NAME}_TEST
+            target_include_directories(${TEST_NAME}
                     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${OMEGA_ROOT}/include)
         endif()
-        target_link_libraries(${PROJECT_NAME}_TEST ${PROJECT_NAME}_LIB)
+
+        target_link_libraries(${TEST_NAME} ${PROJECT_NAME}_LIB)
 
         if (AIP_OPENCV AND OpenCV_FOUND)
-            target_include_directories(${PROJECT_NAME}_TEST PRIVATE ${OpenCV_INCLUDE_DIRS})
-            target_link_libraries(${PROJECT_NAME}_TEST ${OpenCV_LIBS})
+            target_include_directories(${TEST_NAME} PRIVATE ${OpenCV_INCLUDE_DIRS})
+            target_link_libraries(${TEST_NAME} ${OpenCV_LIBS})
         endif ()
 
-        set_target_properties(${PROJECT_NAME}_TEST PROPERTIES OUTPUT_NAME test_${AIP_NAME})
-        set_target_properties(${PROJECT_NAME}_TEST PROPERTIES
+        set_target_properties(${TEST_NAME} PROPERTIES OUTPUT_NAME ${TEST_NAME})
+        set_target_properties(${TEST_NAME} PROPERTIES
                 RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_RUNTIME_DIR}"
                 LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_LIBRARY_DIR}"
                 ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_ARCHIVE_DIR}"
                 )
-    endif()
+
+        unset(TEST_NAME)
+    endforeach ()
 endif()
