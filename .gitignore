@@ -19,6 +19,9 @@
 *.pkl
 *.tar.gz
 *.out
+*.sta
+*.sta2
+*.csta
 # project files
 /.idea
 # auto generate files
