@@ -23,6 +23,10 @@ namespace ts {
             using shared = std::shared_ptr<self>;
             using shared_raw = std::shared_ptr<raw>;
 
+            Device(const self &) = default;
+
+            Device &operator=(const self &) = default;
+
             const raw *get_raw() const {
                 return &m_raw;
             }
@@ -33,20 +37,6 @@ namespace ts {
                 m_type = type;
                 m_raw.id = id;
                 m_raw.type = m_type.c_str();
-            }
-
-            Device(const Device &that)
-                : m_type(that.type()) {
-                m_raw.id = that.id();
-                m_raw.type = m_type.c_str();
-            }
-
-            Device &operator=(const Device &that) {
-                if (this == &that) return *this;
-                this->m_type = that.type();
-                m_raw.id = that.id();
-                m_raw.type = m_type.c_str();
-                return *this;
             }
 
             const std::string &type() const { return m_type; }
