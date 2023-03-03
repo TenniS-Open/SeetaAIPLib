@@ -202,6 +202,11 @@ set_target_properties(${PROJECT_NAME}_LIB PROPERTIES
          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${ENV_ARCHIVE_DIR}"
          )
 
+include(strip)
+if (ANDROID)
+    STRIP_LIBRARY(${PROJECT_NAME}_LIB)
+endif ()
+
 # install now version aip headers
 FILE(GLOB_RECURSE ${PROJECT_NAME}_AIP_HEADER
     ${CMAKE_CURRENT_SOURCE_DIR}/${AIP_ROOT}/include/*.hpp

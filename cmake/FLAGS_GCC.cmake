@@ -72,8 +72,9 @@ if ("${CONFIGURATION}" STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g -ggdb")
 else()
     if (ANDROID)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s")
+        # Use strip command instead -s will remove may needed Unwind symbols
+        # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s")
+        # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s")
     endif()
 
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
