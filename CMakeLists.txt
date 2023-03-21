@@ -162,6 +162,10 @@ endif()
 add_library(${PROJECT_NAME}_LIB ${AIP_TYPE}
         ${${PROJECT_NAME}_SOURCE} ${${PROJECT_NAME}_PRIVATE_HEADER} ${${PROJECT_NAME}_PUBLIC_HEADER})
 
+set_target_properties(${PROJECT_NAME}_LIB PROPERTIES
+        BUILD_RPATH "$ORIGIN"
+        INSTALL_RPATH "$ORIGIN")
+
 if (WIN32)
     set_target_properties(${PROJECT_NAME}_LIB PROPERTIES PREFIX "")
 endif ()
@@ -193,6 +197,7 @@ if (AIP_FAKE_TENNIS)
     add_subdirectory(fake/tennis)
     target_include_directories(${PROJECT_NAME}_LIB PRIVATE ${FAKE_TENNIS_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME}_LIB ${FAKE_TENNIS_LIBS})
+    set_target_properties(${PROJECT_NAME}_LIB PROPERTIES INSTALL_RPATH "$ORIGIN")
 endif()
 
 set_target_properties(${PROJECT_NAME}_LIB PROPERTIES OUTPUT_NAME ${AIP_NAME}${ENV_SUFFIX})
